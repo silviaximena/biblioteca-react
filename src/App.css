@@ -1,38 +1,81 @@
-.App {
+body {
+  margin: 0;
+  background-color: #ffffff;
+  font-family: 'Work Sans', sans-serif;
+  color: #222;
+}
+
+h1, h2, h3, .navbar-brand {
+  font-family: 'Lora', serif;
+}
+
+.seccion-titulo {
   text-align: center;
+  margin: 32px 0 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.seccion-titulo span {
+  border: 1px solid #f2c14e;
+  padding: 8px 20px;
+  font-family: 'Lora', serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #111;
+  display: inline-block;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.btn-amarillo {
+  background-color: #f2c14e;
+  color: #111 !important;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.btn-amarillo:hover {
+  background-color: #d9a92e;
+  color: #111 !important;
+}
+
+.categoria-card {
+  background-color: #222;
+  border-radius: 8px;
+  height: 100px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: flex-end;
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
   color: white;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-.App-link {
-  color: #61dafb;
+.categoria-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(160deg, rgba(242, 193, 78, 0.12), transparent 60%);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.categoria-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background-color: #f2c14e;
+  transition: height 0.18s ease;
+}
+
+.categoria-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22);
+  background-color: #2a2a2a;
+}
+
+.categoria-card:hover::after {
+  height: 6px;
 }
