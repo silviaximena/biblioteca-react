@@ -20,11 +20,16 @@ import RutaProtegida from './components/RutaProtegida';
 import ErrorBoundary from './components/ErrorBoundary';
 import Footer from './components/Footer';
 
+// Fuente de datos simulada con las operaciones CRUD (src/data/datos.js).
+// Se importa todo junto como "datos" para usarlo así: datos.crearLibro(...)
+import * as datos from './data/datos';
+
+// Libros con los que parte la biblioteca la primera vez (ahora con portada)
 const librosIniciales = [
-  { id: 1, titulo: 'Cien Años de Soledad', autor: 'Gabriel García Márquez', stock: 3, disponibles: 2, portada: '', categoria: 'Novelas' },
-  { id: 2, titulo: 'Fundamentos de Bases de Datos', autor: 'Elmasri', stock: 2, disponibles: 0, portada: '', categoria: 'Técnicos' },
-  { id: 3, titulo: 'Clean Code', autor: 'Robert Martin', stock: 4, disponibles: 4, portada: '', categoria: 'Técnicos' },
-  { id: 4, titulo: 'PL/SQL para Principiantes', autor: 'Oracle Press', stock: 1, disponibles: 1, portada: '', categoria: 'Técnicos' },
+  { id: 1, titulo: 'Cien Años de Soledad', autor: 'Gabriel García Márquez', stock: 3, disponibles: 2, portada: 'https://covers.openlibrary.org/b/isbn/9780307474728-L.jpg', categoria: 'Novelas' },
+  { id: 2, titulo: 'Fundamentos de Bases de Datos', autor: 'Elmasri', stock: 2, disponibles: 0, portada: 'https://covers.openlibrary.org/b/isbn/9780133970777-L.jpg', categoria: 'Técnicos' },
+  { id: 3, titulo: 'Clean Code', autor: 'Robert Martin', stock: 4, disponibles: 4, portada: 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg', categoria: 'Técnicos' },
+  { id: 4, titulo: 'PL/SQL para Principiantes', autor: 'Oracle Press', stock: 1, disponibles: 1, portada: 'https://covers.openlibrary.org/b/isbn/9781449324452-L.jpg', categoria: 'Técnicos' },
 ];
 
 const usuariosIniciales = [
@@ -36,36 +41,24 @@ function App() {
   const [busqueda, setBusqueda] = useState('');
   const [usuario, setUsuario] = useState(null);
 
-  const [libros, setLibros] = useState(() => {
-    const guardado = localStorage.getItem('biblioteca_libros');
-    return guardado ? JSON.parse(guardado) : librosIniciales;
-  });
+  // LEER: cada lista se carga desde localStorage usando datos.js.
+  // Si no hay nada guardado, se usan los valores iniciales.
+  const [libros, setLibros] = useState(() => datos.leerDatos(datos.CLAVES.libros, librosIniciales));
+  const [usuarios, setUsuarios] = useState(() => datos.leerDatos(datos.CLAVES.usuarios, usuariosIniciales));
+  const [prestamos, setPrestamos] = useState(() => datos.leerDatos(datos.CLAVES.prestamos, []));
+  const [reservas] = useState(() => datos.leerDatos(datos.CLAVES.reservas, []));
 
-  const [usuarios, setUsuarios] = useState(() => {
-    const guardado = localStorage.getItem('biblioteca_usuarios');
-    return guardado ? JSON.parse(guardado) : usuariosIniciales;
-  });
-
-  const [prestamos, setPrestamos] = useState(() => {
-    const guardado = localStorage.getItem('biblioteca_prestamos');
-    return guardado ? JSON.parse(guardado) : [];
-  });
-
-  const [reservas] = useState(() => {
-    const guardado = localStorage.getItem('biblioteca_reservas');
-    return guardado ? JSON.parse(guardado) : [];
-  });
-
+  // GUARDAR: cada vez que una lista cambia, se guarda en localStorage
   useEffect(() => {
-    localStorage.setItem('biblioteca_libros', JSON.stringify(libros));
+    datos.guardarDatos(datos.CLAVES.libros, libros);
   }, [libros]);
 
   useEffect(() => {
-    localStorage.setItem('biblioteca_usuarios', JSON.stringify(usuarios));
+    datos.guardarDatos(datos.CLAVES.usuarios, usuarios);
   }, [usuarios]);
 
   useEffect(() => {
-    localStorage.setItem('biblioteca_prestamos', JSON.stringify(prestamos));
+    datos.guardarDatos(datos.CLAVES.prestamos, prestamos);
   }, [prestamos]);
 
   const registrarUsuario = (nuevoUsuario) => {
@@ -77,17 +70,19 @@ function App() {
     setUsuario((prev) => (prev && prev.correo === correo ? { ...prev, ...cambios } : prev));
   };
 
+  // CREAR libro (usa datos.js)
   const agregarLibro = (libro) => {
-    const nuevoId = libros.length > 0 ? Math.max(...libros.map((l) => l.id)) + 1 : 1;
-    setLibros([...libros, { id: nuevoId, ...libro }]);
+    setLibros(datos.crearLibro(libros, libro));
   };
 
+  // ACTUALIZAR libro (usa datos.js)
   const editarLibro = (id, cambios) => {
-    setLibros(libros.map((l) => (l.id === id ? { ...l, ...cambios } : l)));
+    setLibros(datos.actualizarLibro(libros, id, cambios));
   };
 
+  // ELIMINAR libro (usa datos.js)
   const eliminarLibro = (id) => {
-    setLibros(libros.filter((l) => l.id !== id));
+    setLibros(datos.eliminarLibro(libros, id));
   };
 
   const pedirPrestamo = (libro, usuarioActual) => {
