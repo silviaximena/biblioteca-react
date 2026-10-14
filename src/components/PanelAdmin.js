@@ -71,38 +71,46 @@ const PanelAdmin = ({ usuario, libros, agregarLibro, editarLibro, eliminarLibro,
   const modulosVisibles = modulos.filter((m) => m.roles.includes(usuario.tipo));
 
   return (
-    <div style={{ display: 'flex', minHeight: '70vh' }}>
-      <div style={{ width: '220px', backgroundColor: '#111111', padding: '20px 0', flexShrink: 0 }}>
-        <div style={{ color: '#f2c14e', fontWeight: 700, fontSize: '13px', padding: '0 20px 16px', textTransform: 'uppercase' }}>
+    // Contenedor del panel: en celular apila menú y contenido;
+    // desde tablet (768px) los pone uno al lado del otro (ver App.css)
+    <div className="panel-contenedor">
+      {/* Menú del panel: fila deslizable en celular, barra lateral en pantallas grandes */}
+      <div className="panel-menu">
+        <div className="panel-menu-titulo">
           {esAdmin ? 'Panel Admin' : 'Panel Bibliotecario'}
         </div>
-        {modulosVisibles.map((m) => (
-          <div
-            key={m.id}
-            onClick={() => setModuloActivo(m.id)}
-            style={{
-              padding: '12px 20px',
-              color: moduloActivo === m.id ? '#f2c14e' : '#e8e8e8',
-              backgroundColor: moduloActivo === m.id ? '#222' : 'transparent',
-              borderLeft: moduloActivo === m.id ? '3px solid #f2c14e' : '3px solid transparent',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: moduloActivo === m.id ? 700 : 400,
-            }}
-          >
-            {m.label}
-          </div>
-        ))}
+        <div className="panel-menu-items">
+          {modulosVisibles.map((m) => (
+            <div
+              key={m.id}
+              onClick={() => setModuloActivo(m.id)}
+              style={{
+                padding: '12px 20px',
+                color: moduloActivo === m.id ? '#f2c14e' : '#e8e8e8',
+                backgroundColor: moduloActivo === m.id ? '#222' : 'transparent',
+                borderLeft: moduloActivo === m.id ? '3px solid #f2c14e' : '3px solid transparent',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: moduloActivo === m.id ? 700 : 400,
+                whiteSpace: 'nowrap', // evita que "Gestión de libros" se corte en dos líneas
+              }}
+            >
+              {m.label}
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div style={{ flex: 1, padding: '20px 30px' }}>
+      {/* Contenido del módulo activo */}
+      <div className="panel-contenido">
         <BotonVolver />
 
         {moduloActivo === 'resumen' && (
           <>
             <div className="seccion-titulo"><span>Resumen</span></div>
+            {/* xs={12}: en celular cada tarjeta ocupa todo el ancho; md={4}: 3 por fila desde tablet */}
             <Row className="g-3">
-              <Col md={4}>
+              <Col xs={12} md={4}>
                 <Card className="text-center shadow-sm">
                   <Card.Body>
                     <div style={{ fontSize: '28px', fontWeight: 700 }}>{totalLibros}</div>
@@ -110,7 +118,7 @@ const PanelAdmin = ({ usuario, libros, agregarLibro, editarLibro, eliminarLibro,
                   </Card.Body>
                 </Card>
               </Col>
-              <Col md={4}>
+              <Col xs={12} md={4}>
                 <Card className="text-center shadow-sm">
                   <Card.Body>
                     <div style={{ fontSize: '28px', fontWeight: 700, color: '#2f9e6e' }}>{totalDisponibles}</div>
@@ -118,7 +126,7 @@ const PanelAdmin = ({ usuario, libros, agregarLibro, editarLibro, eliminarLibro,
                   </Card.Body>
                 </Card>
               </Col>
-              <Col md={4}>
+              <Col xs={12} md={4}>
                 <Card className="text-center shadow-sm">
                   <Card.Body>
                     <div style={{ fontSize: '28px', fontWeight: 700, color: '#c0392b' }}>{totalAgotados}</div>
@@ -152,25 +160,26 @@ const PanelAdmin = ({ usuario, libros, agregarLibro, editarLibro, eliminarLibro,
             {esAdmin && mostrarForm && (
               <Card className="mb-4 p-3">
                 <Form onSubmit={handleSubmit}>
+                  {/* En celular cada campo ocupa su propia fila (xs=12); desde tablet se reparten (md) */}
                   <Row className="g-2">
-                    <Col md={3}>
+                    <Col xs={12} md={3}>
                       <Form.Control name="titulo" placeholder="Título" value={form.titulo} onChange={handleChange} required />
                     </Col>
-                    <Col md={3}>
+                    <Col xs={12} md={3}>
                       <Form.Control name="autor" placeholder="Autor" value={form.autor} onChange={handleChange} required />
                     </Col>
-                    <Col md={2}>
+                    <Col xs={6} md={2}>
                       <Form.Control type="number" name="stock" placeholder="Stock" min="0" value={form.stock} onChange={handleChange} required />
                     </Col>
-                    <Col md={2}>
+                    <Col xs={6} md={2}>
                       <Form.Control type="number" name="disponibles" placeholder="Disponibles" min="0" value={form.disponibles} onChange={handleChange} required />
                     </Col>
-                    <Col md={2}>
+                    <Col xs={12} md={2}>
                       <Form.Control name="portada" placeholder="URL de la portada" value={form.portada} onChange={handleChange} />
                     </Col>
                   </Row>
                   <Row className="g-2 mt-2">
-                    <Col md={3}>
+                    <Col xs={12} md={3}>
                       <Form.Select name="categoria" value={form.categoria || ''} onChange={handleChange}>
                         <option value="">Categoría</option>
                         <option value="Novelas">Novelas</option>
@@ -200,6 +209,7 @@ const PanelAdmin = ({ usuario, libros, agregarLibro, editarLibro, eliminarLibro,
               </Card>
             )}
 
+            {/* responsive: en pantallas chicas la tabla se desliza hacia el lado sin romper la página */}
             <Table striped bordered hover responsive>
               <thead style={{ backgroundColor: '#111111', color: '#fff' }}>
                 <tr>
@@ -225,7 +235,7 @@ const PanelAdmin = ({ usuario, libros, agregarLibro, editarLibro, eliminarLibro,
                     <td>{libro.disponibles}</td>
                     <td>{libro.disponibles === 0 ? <Badge bg="danger">Agotado</Badge> : <Badge bg="success">Disponible</Badge>}</td>
                     {esAdmin && (
-                      <td>
+                      <td style={{ whiteSpace: 'nowrap' }}>
                         <Button size="sm" variant="outline-secondary" className="me-2" onClick={() => iniciarEdicion(libro)}>Editar</Button>
                         <Button size="sm" variant="outline-danger" onClick={() => eliminarLibro(libro.id)}>Eliminar</Button>
                       </td>

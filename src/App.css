@@ -79,3 +79,119 @@ h1, h2, h3, .navbar-brand {
 .categoria-card:hover::after {
   height: 6px;
 }
+/* ===== Navbar responsivo de la biblioteca ===== */
+.navbar-biblioteca {
+  background-color: #111111;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.navbar-biblioteca .marca-biblioteca {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.navbar-biblioteca .nav-link {
+  color: #e8e8e8;
+  font-size: 14px;
+}
+
+.navbar-biblioteca .nav-link:hover,
+.navbar-biblioteca .nav-link:focus {
+  color: #f2c14e;
+}
+
+/* Link del Panel en dorado y negrita, como antes */
+.navbar-biblioteca .enlace-panel,
+.navbar-biblioteca .enlace-ingresar {
+  color: #f2c14e;
+  font-weight: 700;
+}
+
+.navbar-biblioteca .enlace-usuario {
+  color: #aaaaaa;
+  font-size: 13px;
+}
+
+.navbar-biblioteca .rol-usuario {
+  color: #666666;
+}
+
+.navbar-biblioteca .boton-salir {
+  border-color: #555555;
+  border-radius: 14px;
+  font-size: 13px;
+  padding: 4px 12px;
+}
+
+.buscador-navbar .form-control {
+  border: none;
+  font-size: 14px;
+  padding: 10px 16px;
+}
+/* ===== Navbar: el buscador baja a su propia fila, como antes ===== */
+.navbar-biblioteca > .container-fluid {
+  flex-wrap: wrap;
+}
+
+/* ===== Panel de administración responsivo ===== */
+
+/* Celular (por defecto): menú arriba y contenido abajo */
+.panel-contenedor {
+  display: flex;
+  flex-direction: column;
+  min-height: 70vh;
+}
+
+.panel-menu {
+  background-color: #111111;
+  padding: 12px 0;
+  width: 100%;
+}
+
+.panel-menu-titulo {
+  color: #f2c14e;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 0 20px 10px;
+  text-transform: uppercase;
+}
+
+/* Los módulos quedan en una fila que se puede deslizar hacia el lado */
+.panel-menu-items {
+  display: flex;
+  overflow-x: auto;
+}
+
+.panel-contenido {
+  flex: 1;
+  min-width: 0; /* impide que las tablas estiren la página hacia la derecha */
+  padding: 16px;
+}
+
+/* Tablet y escritorio (768px o más): menú lateral a la izquierda */
+@media (min-width: 768px) {
+  .panel-contenedor {
+    flex-direction: row;
+  }
+
+  .panel-menu {
+    width: 220px;
+    flex-shrink: 0;
+    padding: 20px 0;
+  }
+
+  .panel-menu-titulo {
+    padding: 0 20px 16px;
+  }
+
+  .panel-menu-items {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+
+  .panel-contenido {
+    padding: 20px 30px;
+  }
+}

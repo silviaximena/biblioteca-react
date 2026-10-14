@@ -1,76 +1,105 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Navbar, Nav, Container, Form, Button } from 'react-bootstrap';
 
+// Barra de navegación de la biblioteca.
+// Usa el Navbar de React Bootstrap: en pantallas grandes muestra los links en fila
+// y en celular los esconde en un botón ☰ (Navbar.Toggle + Navbar.Collapse).
 const NavegacionBiblioteca = ({ busqueda, setBusqueda, usuario, setUsuario }) => {
   const navigate = useNavigate();
 
-  const handleBuscar = () => navigate('/catalogo');
+  // STATE: indica si el menú ☰ está abierto en celular
+  const [menuAbierto, setMenuAbierto] = useState(false);
+
+  // Cierra el menú después de elegir una opción (solo se nota en celular)
+  const cerrarMenu = () => setMenuAbierto(false);
+
+  // Al buscar, se cierra el menú y se va al catálogo con el texto escrito
+  const handleBuscar = (e) => {
+    e.preventDefault(); // evita que el formulario recargue la página
+    cerrarMenu();
+    navigate('/catalogo');
+  };
 
   const cerrarSesion = () => {
     setUsuario(null);
+    cerrarMenu();
     navigate('/');
   };
 
+  // Solo administradores y bibliotecarios ven Usuarios, Préstamos, Reservas y Panel
   const puedeVerPanel = usuario && (usuario.tipo === 'ADMINISTRADOR' || usuario.tipo === 'BIBLIOTECARIO');
 
   return (
-    <div style={{ backgroundColor: '#111111', padding: '16px 24px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap' }}>
-        <Link to="/" style={{ color: '#fff', fontWeight: 700, fontSize: '18px', textDecoration: 'none' }}>
+    <Navbar
+      expand="lg"
+      variant="dark"
+      className="navbar-biblioteca"
+      expanded={menuAbierto}
+      onToggle={setMenuAbierto}
+    >
+      <Container fluid className="px-3 px-md-4">
+        <Navbar.Brand as={Link} to="/" onClick={cerrarMenu} className="marca-biblioteca">
           Biblioteca Municipal
-        </Link>
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <Link to="/" style={{ color: '#e8e8e8', fontSize: '14px', textDecoration: 'none' }}>Inicio</Link>
-          <Link to="/catalogo" style={{ color: '#e8e8e8', fontSize: '14px', textDecoration: 'none' }}>Catálogo</Link>
-          {puedeVerPanel && (
-  <Link to="/usuarios" style={{ color: '#e8e8e8', fontSize: '14px', textDecoration: 'none' }}>Usuarios</Link>
-)}
-         {puedeVerPanel && (
-  <>
-    <Link to="/prestamos" style={{ color: '#e8e8e8', fontSize: '14px', textDecoration: 'none' }}>Préstamos</Link>
-    <Link to="/reservas" style={{ color: '#e8e8e8', fontSize: '14px', textDecoration: 'none' }}>Reservas</Link>
-  </>
-)}
+        </Navbar.Brand>
 
-          {puedeVerPanel && (
-            <Link to="/panel" style={{ color: '#f2c14e', fontSize: '14px', textDecoration: 'none', fontWeight: 700 }}>
-              Panel
-            </Link>
-          )}
+        {/* Botón ☰: solo aparece en pantallas pequeñas */}
+        <Navbar.Toggle aria-controls="menu-biblioteca" aria-label="Abrir menú de navegación" />
 
-          {usuario ? (
-  <>
-    <Link to="/perfil" style={{ color: '#aaa', fontSize: '13px', textDecoration: 'none' }}>
-      {usuario.nombre}{' '}
-      <span style={{ color: '#666' }}>({usuario.tipo})</span>
-    </Link>
-              <button
-                onClick={cerrarSesion}
-                style={{ background: 'none', border: '1px solid #555', color: '#e8e8e8', borderRadius: '14px', padding: '4px 12px', fontSize: '13px', cursor: 'pointer' }}
-              >
-                Salir
-              </button>
-            </>
-          ) : (
-            <Link to="/login" style={{ color: '#f2c14e', fontSize: '14px', textDecoration: 'none' }}>Ingresar</Link>
-          )}
-        </div>
-      </div>
+        <Navbar.Collapse id="menu-biblioteca">
+          {/* ms-auto empuja los links a la derecha en pantallas grandes */}
+          <Nav className="ms-auto align-items-lg-center gap-lg-2">
+            <Nav.Link as={Link} to="/" onClick={cerrarMenu}>Inicio</Nav.Link>
+            <Nav.Link as={Link} to="/catalogo" onClick={cerrarMenu}>Catálogo</Nav.Link>
 
-      <div style={{ display: 'flex', gap: '8px' }}>
-        <input
-          type="text"
-          placeholder="Buscar libros, autores..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleBuscar()}
-          style={{ flex: 1, border: 'none', borderRadius: '20px', padding: '10px 16px', fontSize: '14px' }}
-        />
-        <button className="btn-amarillo" style={{ borderRadius: '20px', padding: '10px 20px', fontSize: '14px' }} onClick={handleBuscar}>
-          Buscar
-        </button>
-      </div>
-    </div>
+            {/* Renderizado condicional según el rol del usuario */}
+            {puedeVerPanel && (
+              <>
+                <Nav.Link as={Link} to="/usuarios" onClick={cerrarMenu}>Usuarios</Nav.Link>
+                <Nav.Link as={Link} to="/prestamos" onClick={cerrarMenu}>Préstamos</Nav.Link>
+                <Nav.Link as={Link} to="/reservas" onClick={cerrarMenu}>Reservas</Nav.Link>
+                <Nav.Link as={Link} to="/panel" onClick={cerrarMenu} className="enlace-panel">Panel</Nav.Link>
+              </>
+            )}
+
+            {usuario ? (
+              <>
+                <Nav.Link as={Link} to="/perfil" onClick={cerrarMenu} className="enlace-usuario">
+                  {usuario.nombre} <span className="rol-usuario">({usuario.tipo})</span>
+                </Nav.Link>
+                <Button
+                  variant="outline-light"
+                  size="sm"
+                  className="boton-salir mt-2 mt-lg-0 align-self-start align-self-lg-center"
+                  onClick={cerrarSesion}
+                >
+                  Salir
+                </Button>
+              </>
+            ) : (
+              <Nav.Link as={Link} to="/login" onClick={cerrarMenu} className="enlace-ingresar">
+                Ingresar
+              </Nav.Link>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+
+        {/* Buscador: siempre visible, ocupa todo el ancho debajo del menú */}
+        <Form className="buscador-navbar d-flex gap-2 w-100 mt-2" role="search" onSubmit={handleBuscar}>
+          <Form.Control
+            type="search"
+            placeholder="Buscar libros, autores..."
+            aria-label="Buscar libros o autores"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            className="rounded-pill"
+          />
+          <Button type="submit" className="btn-amarillo rounded-pill px-4">
+            Buscar
+          </Button>
+        </Form>
+      </Container>
+    </Navbar>
   );
 };
 
