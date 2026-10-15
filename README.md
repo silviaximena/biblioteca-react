@@ -95,6 +95,8 @@ Karma abre Chrome sin ventana (Chrome Headless), ejecuta las pruebas de la carpe
 
 Las pruebas verifican el renderizado, las props, el estado y los eventos de los componentes. Las funciones que los componentes reciben de `App.js` se reemplazan por **mocks** creados con `jasmine.createSpy`, para comprobar que se llaman con los datos correctos.
 
+   📊 [Documento de cobertura de testing](docs/DOCUMENTO_COBERTURA.md)
+
 ## Autores
 
    
