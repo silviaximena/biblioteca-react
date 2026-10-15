@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+# Biblioteca Municipal – React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sistema web de préstamos y reservas de libros desarrollado en **React** y **React Bootstrap** para la Evaluación Parcial N° 2 de **DSY1104 – Desarrollo Fullstack II** (Duoc UC).
 
-## Available Scripts
+## Funcionalidades
 
-In the project directory, you can run:
+- **Catálogo de libros** con búsqueda por título o autor y filtro por categoría.
+- **Préstamos** de 15 días, con solicitud de devolución por parte del estudiante y confirmación del bibliotecario.
+- **Reservas** de libros.
+- **Registro e inicio de sesión** con tres roles:
 
-### `npm start`
+| Rol | Qué puede hacer |
+|---|---|
+| Estudiante | Ver el catálogo, pedir préstamos, ver su perfil y solicitar devoluciones |
+| Bibliotecario | Todo lo anterior + ver préstamos, reservas y usuarios, y confirmar devoluciones |
+| Administrador | Todo lo anterior + agregar, editar y eliminar libros, y ver la lista de usuarios |
 
-Runs the app in the development mode.\
-Open [y](http://localhost:3000) to view it in your browser.
+- **Panel de administración** con resumen, gestión de libros (CRUD con portadas), verificación de usuarios y lista de usuarios.
+- **Rutas protegidas**: cada página revisa el rol del usuario antes de mostrarse.
+- **Diseño responsivo** con React Bootstrap: en celular, el menú se convierte en un botón ☰ y el panel ordena su menú arriba.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tecnologías
 
-### `npm test`
+| Herramienta | Uso |
+|---|---|
+| React 19 | Componentes, props, state y hooks |
+| React Router | Navegación entre páginas y rutas protegidas |
+| React Bootstrap / Bootstrap 5 | Navbar, Card, Table, Form, Button y sistema de grillas |
+| localStorage | Persistencia de libros, usuarios, préstamos y reservas |
+| Jasmine + Karma | Pruebas unitarias en el navegador |
+| Istanbul (karma-coverage) | Informe de cobertura de código |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Estructura del proyecto
 
-### `npm run build`
+```
+biblioteca-react/
+├── public/
+├── src/
+│   ├── components/      Componentes React (Navbar, Catalogo, PanelAdmin, Login, etc.)
+│   ├── data/datos.js    Fuente de datos simulada con funciones CRUD
+│   ├── App.js           Rutas y estado principal de la aplicación
+│   └── App.css          Estilos personalizados
+├── test/                Pruebas unitarias con Jasmine
+│   └── ayudantes/       Datos falsos usados en las pruebas
+└── karma.conf.js        Configuración de Karma
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Instalación
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Requisitos: **Node.js 18 o superior** y **Google Chrome**.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+git clone https://github.com/silviaximena/biblioteca-react.git
+cd biblioteca-react
+npm install
+```
 
-### `npm run eject`
+## Ejecutar la aplicación
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Se abre en `http://localhost:3000`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Cuentas de prueba
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+| Rol | Correo | Contraseña |
+|---|---|---|
+| Administrador | mauricio@profesor.duoc.cl | 1234 |
+| Bibliotecario | biblioteca@duoc.cl | 1234 |
 
-## Learn More
+Para entrar como **estudiante**, crea una cuenta en "Crear cuenta" con un correo `@duoc.cl`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Ejecutar las pruebas
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+npm test
+```
 
-### Code Splitting
+Karma abre Chrome sin ventana (Chrome Headless), ejecuta las pruebas de la carpeta `test/` y muestra el resultado con una tabla de cobertura. El informe visual queda en `coverage/html/index.html`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+**Resultado actual:** 27 pruebas aprobadas · 95,37% de cobertura de sentencias.
 
-### Analyzing the Bundle Size
+| Sentencias | Ramas | Funciones | Líneas |
+|---|---|---|---|
+| 95,37% | 96,25% | 89,13% | 96,73% |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+| Archivo de prueba | Qué prueba | Pruebas |
+|---|---|---|
+| `datos.spec.js` | CRUD de libros, búsqueda, filtro y localStorage | 11 |
+| `Navbar.spec.js` | Opciones según el rol, buscador y cierre de sesión | 7 |
+| `PanelAdmin.spec.js` | Resumen, permisos, formulario y botones Agregar, Editar y Eliminar | 9 |
 
-### Making a Progressive Web App
+Las pruebas verifican el renderizado, las props, el estado y los eventos de los componentes. Las funciones que los componentes reciben de `App.js` se reemplazan por **mocks** creados con `jasmine.createSpy`, para comprobar que se llaman con los datos correctos.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Autora
 
-### Advanced Configuration
+   ## Autores
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+   - **Silvia** – GitHub: [@silviaximena](https://github.com/silviaximena)
+   - **Benjamín Alarcón** – GitHub: [@Benjaalarcon](https://github.com/Benjaalarcon)
+   - **Johan** – GitHub: [@Johancg1](https://github.com/Johancg1)

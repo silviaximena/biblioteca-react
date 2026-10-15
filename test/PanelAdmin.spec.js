@@ -133,4 +133,12 @@ describe('PanelAdmin', () => {
     expect(screen.getByText('Ana Pérez')).toBeTruthy();
     expect(screen.getByText('Pendiente')).toBeTruthy();
   });
+    it('el administrador ve la lista de usuarios registrados', () => {
+    dibujarPanel();
+
+    fireEvent.click(screen.getByText('Usuarios'));
+
+    expect(screen.getByText('Usuarios registrados')).toBeTruthy();
+    expect(document.querySelectorAll('tbody tr').length).toBe(3); // los 3 usuarios de prueba
+  });
 });
