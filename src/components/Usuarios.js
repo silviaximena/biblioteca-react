@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Container, Badge } from 'react-bootstrap';
+import { Table, Container } from 'react-bootstrap';
 import BotonVolver from './BotonVolver';
 
 const Usuarios = ({ usuarios }) => {
