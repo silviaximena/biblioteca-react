@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Table, Button, Form, Row, Col, Card, Badge, Image } from 'react-bootstrap';
 import BotonVolver from './BotonVolver';
 
-const colorEstado = { ACTIVO: 'success', ATRASADO: 'danger', DEVUELTO: 'secondary', VIGENTE: 'success', VENCIDA: 'secondary', CANCELADA: 'danger' };
 const portadaPorDefecto = 'https://placehold.co/80x110/e9e1cb/333333?text=Sin+portada';
 
 const PanelAdmin = ({ usuario, libros, agregarLibro, editarLibro, eliminarLibro, usuarios, prestamos, reservas }) => {

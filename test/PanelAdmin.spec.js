@@ -14,7 +14,7 @@ import {
 
 // Dibuja el Panel con datos falsos. El Router es necesario porque el Panel
 // usa el componente BotonVolver, que navega hacia atrás.
-function dibujarPanel(usuario = administrador) {
+function dibujarPanel(usuario = administrador, cambios = {}) {
   const props = {
     usuario,
     libros: librosDePrueba,
@@ -25,6 +25,7 @@ function dibujarPanel(usuario = administrador) {
     agregarLibro: jasmine.createSpy('agregarLibro'),
     editarLibro: jasmine.createSpy('editarLibro'),
     eliminarLibro: jasmine.createSpy('eliminarLibro'),
+    ...cambios, // permite que una prueba use otros datos
   };
   render(
     <MemoryRouter>
@@ -133,12 +134,58 @@ describe('PanelAdmin', () => {
     expect(screen.getByText('Ana Pérez')).toBeTruthy();
     expect(screen.getByText('Pendiente')).toBeTruthy();
   });
-    it('el administrador ve la lista de usuarios registrados', () => {
+
+  it('el administrador ve la lista de usuarios registrados', () => {
     dibujarPanel();
 
     fireEvent.click(screen.getByText('Usuarios'));
 
     expect(screen.getByText('Usuarios registrados')).toBeTruthy();
     expect(document.querySelectorAll('tbody tr').length).toBe(3); // los 3 usuarios de prueba
+  });
+
+  it('si una portada de la tabla no carga, muestra la imagen de respaldo', () => {
+    dibujarPanel();
+    fireEvent.click(screen.getByText('Gestión de libros'));
+
+    const portada = screen.getByAltText('Clean Code');
+    fireEvent.error(portada); // simulamos que la imagen falló al cargar
+
+    expect(portada.getAttribute('src')).toContain('placehold.co');
+  });
+
+  it('si la vista previa de la portada no carga, muestra la imagen de respaldo', () => {
+    dibujarPanel();
+    fireEvent.click(screen.getByText('Gestión de libros'));
+    fireEvent.click(screen.getByText('+ Agregar libro'));
+
+    escribir('URL de la portada', 'https://ejemplo.cl/no-existe.jpg');
+    const vistaPrevia = screen.getByAltText('Vista previa de portada');
+    fireEvent.error(vistaPrevia);
+
+    expect(vistaPrevia.getAttribute('src')).toContain('placehold.co');
+  });
+
+  it('un libro sin categoría ni portada muestra "Sin asignar" y se puede editar', () => {
+    const libroIncompleto = { id: 4, titulo: 'Libro sin datos', autor: 'Anónimo', stock: 1, disponibles: 1 };
+    dibujarPanel(administrador, { libros: [...librosDePrueba, libroIncompleto] });
+    fireEvent.click(screen.getByText('Gestión de libros'));
+
+    expect(screen.getByText('Sin asignar')).toBeTruthy();
+
+    fireEvent.click(screen.getAllByText('Editar')[3]); // el cuarto libro
+    expect(screen.getByPlaceholderText('Título').value).toBe('Libro sin datos');
+    expect(screen.getByPlaceholderText('URL de la portada').value).toBe('');
+  });
+
+  it('"Verificar usuario" marca como Pendiente a quien tiene una reserva vigente', () => {
+    const reservas = [{ id: 1, correo: 'biblioteca@duoc.cl', libroId: 2, estado: 'VIGENTE' }];
+    dibujarPanel(administrador, { reservas });
+    fireEvent.click(screen.getByText('Verificar usuario'));
+
+    fireEvent.change(screen.getByPlaceholderText('Buscar por nombre o correo...'), { target: { value: 'encargado' } });
+
+    expect(screen.getByText('Encargado de Biblioteca')).toBeTruthy();
+    expect(screen.getByText('Pendiente')).toBeTruthy();
   });
 });

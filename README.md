@@ -80,23 +80,24 @@ npm test
 
 Karma abre Chrome sin ventana (Chrome Headless), ejecuta las pruebas de la carpeta `test/` y muestra el resultado con una tabla de cobertura. El informe visual queda en `coverage/html/index.html`.
 
-**Resultado actual:** 27 pruebas aprobadas · 95,37% de cobertura de sentencias.
+**Resultado actual:** 32 pruebas aprobadas · 100% de cobertura.
 
 | Sentencias | Ramas | Funciones | Líneas |
 |---|---|---|---|
-| 95,37% | 96,25% | 89,13% | 96,73% |
+| 100% | 100% | 100% | 100% |
 
 | Archivo de prueba | Qué prueba | Pruebas |
 |---|---|---|
 | `datos.spec.js` | CRUD de libros, búsqueda, filtro y localStorage | 11 |
 | `Navbar.spec.js` | Opciones según el rol, buscador y cierre de sesión | 7 |
-| `PanelAdmin.spec.js` | Resumen, permisos, formulario y botones Agregar, Editar y Eliminar | 9 |
+| `PanelAdmin.spec.js` | Resumen, permisos, formulario, botones del CRUD e imágenes de respaldo | 13 |
+| `BotonVolver.spec.js` | Regreso a la página anterior | 1 |
 
 Las pruebas verifican el renderizado, las props, el estado y los eventos de los componentes. Las funciones que los componentes reciben de `App.js` se reemplazan por **mocks** creados con `jasmine.createSpy`, para comprobar que se llaman con los datos correctos.
 
-## Autora
+## Autores
 
-   ## Autores
+   
 
    - **Silvia** – GitHub: [@silviaximena](https://github.com/silviaximena)
    - **Benjamín Alarcón** – GitHub: [@Benjaalarcon](https://github.com/Benjaalarcon)
