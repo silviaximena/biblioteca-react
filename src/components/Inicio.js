@@ -35,7 +35,7 @@ const actividades = [
         id: 'tiro-al-blanco',
         titulo: 'Tiro al blanco',
         etiqueta: 'Interactivo',
-        descripcion: 'Un mini juego para hacer una pausa entre lecturas: tensá el arco, apuntá a la diana y sumá puntos.',
+        descripcion: 'Un mini juego para hacer una pausa entre lecturas: tensa el arco, apunta a la diana y suma puntos.',
         horario: 'Disponible todos los días',
         lugar: 'Actividad en línea',
         imagen: 'https://images.pexels.com/photos/6669396/pexels-photo-6669396.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -67,7 +67,7 @@ const Inicio = ({ libros, usuario }) => {
             <div className="seccion-titulo">
                 <span>Servicios</span>
             </div>
-            <Row className="g-2 mb-5">
+            <Row className="g-2 mb-5 justify-content-center">
                 {servicios.map((servicio) => (
                     <Col xs={6} md={2} key={servicio.titulo}>
                         <Link to={servicio.ruta} style={{ textDecoration: 'none' }}>
@@ -100,7 +100,7 @@ const Inicio = ({ libros, usuario }) => {
             </div>
             <Row className="g-3 mb-5">
                 {actividades.map((actividad) => (
-                    <Col md={4} key={actividad.id}>
+                    <Col xs={12} sm={6} lg={3} key={actividad.id}>
                         <Link to={`/actividad/${actividad.id}`} style={{ textDecoration: 'none' }}>
                             <div
                                 style={{
