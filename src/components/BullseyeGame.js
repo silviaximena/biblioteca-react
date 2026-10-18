@@ -51,8 +51,8 @@ const BullseyeGame = () => {
       const localX = pull.x - ANCHOR.x;
       const localY = pull.y - ANCHOR.y;
       bowStringRef.current.setAttribute(
-        'points',
-        `-20,-95 ${localX.toFixed(1)},${localY.toFixed(1)} -20,95`
+          'points',
+          `-20,-95 ${localX.toFixed(1)},${localY.toFixed(1)} -20,95`
       );
     };
 
@@ -136,7 +136,7 @@ const BullseyeGame = () => {
       if (arrowsLeftRef.current <= 0) {
         setTimeout(() => {
           setFinalMsg(
-            `Terminaste con ${scoreRef.current} puntos y una racha máxima de ${bestRef.current}.`
+              `Terminaste con ${scoreRef.current} puntos y una racha máxima de ${bestRef.current}.`
           );
           setGameOver(true);
         }, 900);
@@ -256,9 +256,9 @@ const BullseyeGame = () => {
   };
 
   return (
-    <div className="bg-wrap">
-      {/* Estilos propios del juego, con prefijo "bg-" para no chocar con el resto de App.css */}
-      <style>{`
+      <div className="bg-wrap">
+        {/* Estilos propios del juego, con prefijo "bg-" para no chocar con el resto de App.css */}
+        <style>{`
         .bg-wrap { max-width: 640px; margin: 0 auto; }
         .bg-topbar {
           display: flex; justify-content: space-between; align-items: center;
@@ -305,68 +305,68 @@ const BullseyeGame = () => {
         }
       `}</style>
 
-      <div className="bg-topbar">
-        <div className="bg-stat"><span className="bg-num">{score}</span><span className="bg-label">PUNTOS</span></div>
-        <div className="bg-stat"><span className="bg-num">{arrowsLeft}</span><span className="bg-label">FLECHAS</span></div>
-        <div className="bg-stat"><span className="bg-num">{streak}</span><span className="bg-label">RACHA</span></div>
-        <button className="bg-btn" onClick={reiniciar} type="button">Reiniciar</button>
+        <div className="bg-topbar">
+          <div className="bg-stat"><span className="bg-num">{score}</span><span className="bg-label">PUNTOS</span></div>
+          <div className="bg-stat"><span className="bg-num">{arrowsLeft}</span><span className="bg-label">FLECHAS</span></div>
+          <div className="bg-stat"><span className="bg-num">{streak}</span><span className="bg-label">RACHA</span></div>
+          <button className="bg-btn" onClick={reiniciar} type="button">Reiniciar</button>
+        </div>
+
+        <div className="bg-board" ref={boardRef}>
+          <svg ref={svgRef} viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="bgGlow" cx="50%" cy="50%" r="60%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity=".08" />
+                <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+              </radialGradient>
+            </defs>
+
+            <circle cx={TARGET.x} cy={TARGET.y} r="180" fill="url(#bgGlow)" />
+
+            <line ref={guideRef} x1="0" y1="0" x2="0" y2="0" stroke="#f2c14e" strokeWidth="2" strokeDasharray="6 8" opacity="0" />
+
+            {/* Diana */}
+            <g>
+              <circle cx={TARGET.x} cy={TARGET.y} r="95" fill="#f4f4f4" />
+              <circle cx={TARGET.x} cy={TARGET.y} r="76" fill="#d64545" />
+              <circle cx={TARGET.x} cy={TARGET.y} r="57" fill="#f4f4f4" />
+              <circle cx={TARGET.x} cy={TARGET.y} r="38" fill="#d64545" />
+              <circle cx={TARGET.x} cy={TARGET.y} r="16" fill="#f2c14e" stroke="#b5860a" strokeWidth="2" />
+            </g>
+
+            {/* Acá se van agregando las flechas que quedan clavadas */}
+            <g ref={stuckArrowsRef}></g>
+
+            {/* Arco */}
+            <g transform={`translate(${ANCHOR.x},${ANCHOR.y})`}>
+              <path d="M -20 -95 Q 42 0 -20 95" fill="none" stroke="#5c9d3a" strokeWidth="10" strokeLinecap="round" />
+              <polyline ref={bowStringRef} points="-20,-95 -20,95" stroke="#e8e8e8" strokeWidth="2" fill="none" />
+            </g>
+
+            {/* Flecha en vuelo */}
+            <g ref={flyingArrowRef} visibility="hidden">
+              <line x1="-34" y1="0" x2="34" y2="0" stroke="#c9c9c9" strokeWidth="4" strokeLinecap="round" />
+              <path d="M 34 0 L 22 -7 L 22 7 Z" fill="#c9c9c9" />
+              <path d="M -34 0 L -18 -9 L -18 -1 Z" fill="#7ec850" />
+              <path d="M -34 0 L -18 9 L -18 1 Z" fill="#5c9d3a" />
+            </g>
+          </svg>
+
+          <div className="bg-banner" ref={bannerRef}>HIT!</div>
+
+          {gameOver && (
+              <div className="bg-overlay">
+                <h4>Juego terminado</h4>
+                <p>{finalMsg}</p>
+                <button className="bg-btn" onClick={reiniciar} type="button">Jugar de nuevo</button>
+              </div>
+          )}
+        </div>
+
+        <p className="bg-hint">
+          Haz clic (o toca) sobre el arco, arrastra hacia atrás para tensar y suelta para disparar.
+        </p>
       </div>
-
-      <div className="bg-board" ref={boardRef}>
-        <svg ref={svgRef} viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="bgGlow" cx="50%" cy="50%" r="60%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity=".08" />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-            </radialGradient>
-          </defs>
-
-          <circle cx={TARGET.x} cy={TARGET.y} r="180" fill="url(#bgGlow)" />
-
-          <line ref={guideRef} x1="0" y1="0" x2="0" y2="0" stroke="#f2c14e" strokeWidth="2" strokeDasharray="6 8" opacity="0" />
-
-          {/* Diana */}
-          <g>
-            <circle cx={TARGET.x} cy={TARGET.y} r="95" fill="#f4f4f4" />
-            <circle cx={TARGET.x} cy={TARGET.y} r="76" fill="#d64545" />
-            <circle cx={TARGET.x} cy={TARGET.y} r="57" fill="#f4f4f4" />
-            <circle cx={TARGET.x} cy={TARGET.y} r="38" fill="#d64545" />
-            <circle cx={TARGET.x} cy={TARGET.y} r="16" fill="#f2c14e" stroke="#b5860a" strokeWidth="2" />
-          </g>
-
-          {/* Acá se van agregando las flechas que quedan clavadas */}
-          <g ref={stuckArrowsRef}></g>
-
-          {/* Arco */}
-          <g transform={`translate(${ANCHOR.x},${ANCHOR.y})`}>
-            <path d="M -20 -95 Q 42 0 -20 95" fill="none" stroke="#5c9d3a" strokeWidth="10" strokeLinecap="round" />
-            <polyline ref={bowStringRef} points="-20,-95 -20,95" stroke="#e8e8e8" strokeWidth="2" fill="none" />
-          </g>
-
-          {/* Flecha en vuelo */}
-          <g ref={flyingArrowRef} visibility="hidden">
-            <line x1="-34" y1="0" x2="34" y2="0" stroke="#c9c9c9" strokeWidth="4" strokeLinecap="round" />
-            <path d="M 34 0 L 22 -7 L 22 7 Z" fill="#c9c9c9" />
-            <path d="M -34 0 L -18 -9 L -18 -1 Z" fill="#7ec850" />
-            <path d="M -34 0 L -18 9 L -18 1 Z" fill="#5c9d3a" />
-          </g>
-        </svg>
-
-        <div className="bg-banner" ref={bannerRef}>HIT!</div>
-
-        {gameOver && (
-          <div className="bg-overlay">
-            <h4>Juego terminado</h4>
-            <p>{finalMsg}</p>
-            <button className="bg-btn" onClick={reiniciar} type="button">Jugar de nuevo</button>
-          </div>
-        )}
-      </div>
-
-      <p className="bg-hint">
-        Hacé clic (o tocá) sobre el arco, arrastrá hacia atrás para tensar y soltá para disparar.
-      </p>
-    </div>
   );
 };
 

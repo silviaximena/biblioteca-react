@@ -36,7 +36,7 @@ const actividades = [
     id: 'tiro-al-blanco',
     titulo: 'Tiro al blanco',
     etiqueta: 'Interactivo',
-    descripcion: 'Un mini juego para hacer una pausa entre lecturas: tensá el arco, apuntá a la diana y sumá puntos.',
+    descripcion: 'Un mini juego para hacer una pausa entre lecturas: tensa el arco, apunta a la diana y suma puntos.',
     horario: 'Disponible todos los días',
     lugar: 'Actividad en línea',
     requiereSesion: true,
@@ -53,38 +53,38 @@ const DetalleActividad = ({ usuario }) => {
   }
 
   return (
-    <Container className="my-5" style={{ maxWidth: '600px' }}>
-      <BotonVolver />
-      <Badge bg="warning" text="dark" className="mb-2">{actividad.etiqueta}</Badge>
-      <h2 style={{ fontFamily: 'Lora, serif', color: '#111', marginBottom: '16px' }}>{actividad.titulo}</h2>
-      <p style={{ color: '#555', fontSize: '15px', lineHeight: 1.6 }}>{actividad.descripcion}</p>
+      <Container className="my-5" style={{ maxWidth: '600px' }}>
+        <BotonVolver />
+        <Badge bg="warning" text="dark" className="mb-2">{actividad.etiqueta}</Badge>
+        <h2 style={{ fontFamily: 'Lora, serif', color: '#111', marginBottom: '16px' }}>{actividad.titulo}</h2>
+        <p style={{ color: '#555', fontSize: '15px', lineHeight: 1.6 }}>{actividad.descripcion}</p>
 
-      <div style={{ marginTop: '24px', borderTop: '1px solid #eee', paddingTop: '16px' }}>
-        <div style={{ marginBottom: '10px' }}>
-          <span style={{ fontSize: '12px', color: '#888', display: 'block' }}>Horario</span>
-          <span style={{ fontWeight: 600 }}>{actividad.horario}</span>
+        <div style={{ marginTop: '24px', borderTop: '1px solid #eee', paddingTop: '16px' }}>
+          <div style={{ marginBottom: '10px' }}>
+            <span style={{ fontSize: '12px', color: '#888', display: 'block' }}>Horario</span>
+            <span style={{ fontWeight: 600 }}>{actividad.horario}</span>
+          </div>
+          <div>
+            <span style={{ fontSize: '12px', color: '#888', display: 'block' }}>Lugar</span>
+            <span style={{ fontWeight: 600 }}>{actividad.lugar}</span>
+          </div>
         </div>
-        <div>
-          <span style={{ fontSize: '12px', color: '#888', display: 'block' }}>Lugar</span>
-          <span style={{ fontWeight: 600 }}>{actividad.lugar}</span>
-        </div>
-      </div>
 
-      {actividad.esJuego && (
-        <div style={{ marginTop: '32px', borderTop: '1px solid #eee', paddingTop: '24px' }}>
-          {actividad.requiereSesion && !usuario ? (
-            <Alert variant="light" style={{ border: '1px solid #eee' }}>
-              <p style={{ marginBottom: '12px' }}>Necesitás iniciar sesión para jugar.</p>
-              <Button as={Link} to="/login" variant="dark" size="sm">
-                Iniciar sesión
-              </Button>
-            </Alert>
-          ) : (
-            <BullseyeGame />
-          )}
-        </div>
-      )}
-    </Container>
+        {actividad.esJuego && (
+            <div style={{ marginTop: '32px', borderTop: '1px solid #eee', paddingTop: '24px' }}>
+              {actividad.requiereSesion && !usuario ? (
+                  <Alert variant="light" style={{ border: '1px solid #eee' }}>
+                    <p style={{ marginBottom: '12px' }}>Necesitas iniciar sesión para jugar.</p>
+                    <Button as={Link} to="/login" variant="dark" size="sm">
+                      Iniciar sesión
+                    </Button>
+                  </Alert>
+              ) : (
+                  <BullseyeGame />
+              )}
+            </div>
+        )}
+      </Container>
   );
 };
 
